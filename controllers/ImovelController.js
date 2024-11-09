@@ -1,0 +1,79 @@
+// controllers/ImovelController.js
+const Imovel = require('../models/Imovel');
+const Proprietario = require('../models/Proprietario');
+
+// Criar um novo imóvel
+const createImovel = async (req, res) => {
+    try {
+        const imovel = await Imovel.create(req.body);
+        res.status(201).json(imovel);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// Listar todos os imóveis
+const getAllImoveis = async (req, res) => {
+    try {
+        const imoveis = await Imovel.findAll({
+            include: [{ model: Proprietario, attributes: ['nome'] }]
+        });
+        res.status(200).json(imoveis);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Buscar um imóvel por ID
+const getImovelById = async (req, res) => {
+    try {
+        const imovel = await Imovel.findByPk(req.params.id, {
+            include: [{ model: Proprietario, attributes: ['nome'] }]
+        });
+        if (imovel) {
+            res.status(200).json(imovel);
+        } else {
+            res.status(404).json({ error: 'Imóvel não encontrado' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Atualizar um imóvel
+const updateImovel = async (req, res) => {
+    try {
+        const imovel = await Imovel.findByPk(req.params.id);
+        if (imovel) {
+            await imovel.update(req.body);
+            res.status(200).json(imovel);
+        } else {
+            res.status(404).json({ error: 'Imóvel não encontrado' });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// Excluir um imóvel
+const deleteImovel = async (req, res) => {
+    try {
+        const imovel = await Imovel.findByPk(req.params.id);
+        if (imovel) {
+            await imovel.destroy();
+            res.status(204).end();
+        } else {
+            res.status(404).json({ error: 'Imóvel não encontrado' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports = {
+    createImovel,
+    getAllImoveis,
+    getImovelById,
+    updateImovel,
+    deleteImovel
+};
