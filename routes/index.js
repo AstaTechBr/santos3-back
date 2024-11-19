@@ -68,7 +68,3 @@ router.get('/imovelImagem/:id', getImovelImageById);
 router.delete('/imovelImagem/:id', deleteImovelImageById);
 
 module.exports = router;
-
-
-
-module.exports = router;
