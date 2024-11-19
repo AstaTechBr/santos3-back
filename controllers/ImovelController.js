@@ -1,5 +1,6 @@
 // controllers/ImovelController.js
 const Imovel = require('../models/Imovel');
+const { Op } = require('sequelize');
 const Proprietario = require('../models/Proprietario');
 
 // Criar um novo imóvel
@@ -70,10 +71,63 @@ const deleteImovel = async (req, res) => {
     }
 };
 
+const getFilteredImoveis = async (req, res) => {
+    try {
+        const filters = {};
+
+        // Adicionar filtros somente se os parâmetros de consulta estiverem presentes
+        if (req.query.tipo_imovel) {
+            filters.tipo_imovel = req.query.tipo_imovel;
+        }
+        if (req.query.finalidade) {
+            filters.finalidade = req.query.finalidade;
+        }
+        if (req.query.min_valor || req.query.max_valor) {
+            filters.valor = {};
+            if (req.query.min_valor) {
+                filters.valor[Op.gte] = parseFloat(req.query.min_valor);
+            }
+            if (req.query.max_valor) {
+                filters.valor[Op.lte] = parseFloat(req.query.max_valor);
+            }
+        }
+        if (req.query.qtd_quartos) {
+            filters.qtd_quartos = parseInt(req.query.qtd_quartos, 10);
+        }
+        if (req.query.metragem_min || req.query.metragem_max) {
+            filters.metragem = {};
+            if (req.query.metragem_min) {
+                filters.metragem[Op.gte] = parseInt(req.query.metragem_min, 10);
+            }
+            if (req.query.metragem_max) {
+                filters.metragem[Op.lte] = parseInt(req.query.metragem_max, 10);
+            }
+        }
+        if (req.query.sacada) {
+            filters.sacada = req.query.sacada === 'true';
+        }
+        if (req.query.elevador) {
+            filters.elevador = req.query.elevador === 'true';
+        }
+        if (req.query.destaque) {
+            filters.destaque = req.query.destaque === 'true';
+        }
+
+        // Buscar imóveis com base nos filtros aplicados
+        const imoveis = await Imovel.findAll({ where: filters });
+        res.status(200).json(imoveis);
+    } catch (error) {
+        console.error("Erro ao buscar imóveis:", error);
+        res.status(500).json({ error: 'Erro ao buscar imóveis filtrados' });
+    }
+};
+
+
 module.exports = {
     createImovel,
     getAllImoveis,
     getImovelById,
     updateImovel,
-    deleteImovel
+    deleteImovel,
+    getFilteredImoveis
 };

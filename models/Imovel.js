@@ -1,4 +1,3 @@
-// models/Imovel.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/config');
 const Proprietario = require('./Proprietario');
@@ -16,40 +15,42 @@ const Imovel = sequelize.define('Imovel', {
             key: 'id'
         }
     },
-    codigo_referencia: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
     endereco: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    qtd_comodos: {
-        type: DataTypes.INTEGER,
+    tipo_imovel: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            isIn: [['apartamento', 'casa', 'terreno', 'galpao']]
+        }
+    },
+    finalidade: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            isIn: [['locacao', 'compra']]
+        }
+    },
+    valor: {
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false
+    },
+    qtd_quartos: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     },
     suite: {
         type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    garagem: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    },
-    individual: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    },
-    disponivel: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-    },
-    observacoes: {
-        type: DataTypes.TEXT,
         allowNull: true
     },
-    apartamento_num: {
-        type: DataTypes.STRING,
+    garagem: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    metragem: {
+        type: DataTypes.INTEGER,
         allowNull: true
     },
     andar: {
@@ -59,10 +60,6 @@ const Imovel = sequelize.define('Imovel', {
     sacada: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
-    },
-    vagas: {
-        type: DataTypes.INTEGER,
-        allowNull: true
     },
     elevador: {
         type: DataTypes.BOOLEAN,
@@ -82,6 +79,7 @@ const Imovel = sequelize.define('Imovel', {
     }
 });
 
+// Definindo relacionamento com Proprietário
 Proprietario.hasMany(Imovel, { foreignKey: 'proprietario_id' });
 Imovel.belongsTo(Proprietario, { foreignKey: 'proprietario_id' });
 

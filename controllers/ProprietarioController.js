@@ -4,15 +4,15 @@ const Proprietario = require('../models/Proprietario');
 // Criar um novo proprietário
 const createProprietario = async (req, res) => {
     try {
-        const { nome, rg, cpf, data_nascimento, endereco, telefone, tipo_imovel } = req.body;
+        const { nome, rg, cpf, data_nascimento, endereco, telefone} = req.body;
         const novoProprietario = await Proprietario.create({
             nome,
             rg,
             cpf,
             data_nascimento,
             endereco,
-            telefone,
-            tipo_imovel
+            telefone
+        
         });
         res.status(201).json(novoProprietario);
     } catch (error) {
@@ -48,7 +48,7 @@ const getProprietarioById = async (req, res) => {
 const updateProprietario = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nome, rg, cpf, data_nascimento, endereco, telefone, tipo_imovel } = req.body;
+        const { nome, rg, cpf, data_nascimento, endereco, telefone } = req.body;
         const proprietario = await Proprietario.findByPk(id);
 
         if (!proprietario) {
@@ -61,8 +61,8 @@ const updateProprietario = async (req, res) => {
             cpf,
             data_nascimento,
             endereco,
-            telefone,
-            tipo_imovel
+            telefone
+        
         });
         res.status(200).json(proprietario);
     } catch (error) {

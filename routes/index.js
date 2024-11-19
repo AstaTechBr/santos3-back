@@ -4,8 +4,6 @@ const router = express.Router();
 const ImovelController = require('../controllers/ImovelController');
 const InquilinoController = require('../controllers/InquilinoController');
 const ProprietarioController = require('../controllers/ProprietarioController');
-const ImovelImagemController = require('../controllers/ImovelImagemController');
-const upload = require('../middlewares/multerConfig');
 
 
 /*---------IMOVEL---------------*/
@@ -14,6 +12,7 @@ router.get('/imoveis', ImovelController.getAllImoveis);
 router.get('/imoveis/:id', ImovelController.getImovelById);
 router.put('/imoveis/atualizar/:id', ImovelController.updateImovel);
 router.delete('/imoveis/deletar/:id', ImovelController.deleteImovel);
+router.get('/imoveisFiltro', ImovelController.getFilteredImoveis);
 
 
 /*---------INQUILINO------------*/
@@ -32,13 +31,44 @@ router.put('/proprietarios/atualizar/:id', ProprietarioController.updatePropriet
 router.delete('/proprietarios/deletar/:id', ProprietarioController.deleteProprietario);
 
 
+// routes/imovelImagemRoutes.js
+const multer = require('multer');
+const path = require('path');
+const { 
+    createImovelImage, 
+    getAllImovelImages, 
+    getImovelImageById,  
+    deleteImovelImageById
+} = require('../controllers/ImovelImagemController');
 
-/*---------IMOVEL IMAGENS---------------*/
-router.post('/imovel/:imovel_id/imagens', upload.single('imagem'), ImovelImagemController.createImagem);
-router.get('/imovel/:imovel_id/imagens', ImovelImagemController.getAllImagensByImovel);
-router.get('/imagens/:id', ImovelImagemController.getImagemById);
-router.put('/imagens/:id', ImovelImagemController.updateImagem);
-router.delete('/imagens/:id', ImovelImagemController.deleteImagem);
+function createMulter(destination) {
+    return multer({
+        storage: multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, destination);
+            },
+            filename: function (req, file, cb) {
+                const date = new Date().toISOString().replace(/[^a-zA-Z0-9]/g, '');
+                cb(null, date + path.extname(file.originalname));
+            },
+        }),
+    });
+}
+
+// Rota para criar uma nova imagem de imóvel
+router.post('/imovelImagem', createMulter('./images').single('image'), createImovelImage);
+
+// Rota para listar todas as imagens de um imóvel
+router.get('/imovelImagem', getAllImovelImages);
+
+// Rota para buscar uma imagem de imóvel por ID
+router.get('/imovelImagem/:id', getImovelImageById);
+
+// Rota para excluir uma imagem de imóvel por ID
+router.delete('/imovelImagem/:id', deleteImovelImageById);
+
+module.exports = router;
+
 
 
 module.exports = router;

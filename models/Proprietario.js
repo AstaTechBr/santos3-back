@@ -32,10 +32,6 @@ const Proprietario = sequelize.define('Proprietario', {
     telefone: {
         type: DataTypes.STRING,
         allowNull: false
-    },
-    tipo_imovel: {
-        type: DataTypes.ENUM('locacao', 'locacao_adm', 'venda'),
-        allowNull: false
     }
 });
 
