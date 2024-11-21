@@ -38,7 +38,9 @@ const createImovel = async (req, res) => {
 const getAllImoveis = async (req, res) => {
     try {
         const imoveis = await Imovel.findAll({
-            include: [{ model: Proprietario, attributes: ['nome'] }]
+            include: [
+                { model: ImovelImagem, attributes: ['url_imagem'] }
+            ]
         });
         res.status(200).json(imoveis);
     } catch (error) {
@@ -50,7 +52,9 @@ const getAllImoveis = async (req, res) => {
 const getImovelById = async (req, res) => {
     try {
         const imovel = await Imovel.findByPk(req.params.id, {
-            include: [{ model: Proprietario, attributes: ['nome'] }]
+            include: [
+                { model: ImovelImagem, attributes: ['url_imagem'] }
+            ]
         });
         if (imovel) {
             res.status(200).json(imovel);
@@ -143,6 +147,25 @@ const getFilteredImoveis = async (req, res) => {
     }
 };
 
+const getImoveisDestaquesTrue = async (req, res) => {
+    try {
+        const imoveis = await Imovel.findAll({
+            where: {
+                destaque: true,  
+            },
+            include: [
+                { model: ImovelImagem, attributes: ['url_imagem'] }
+            ]
+        });
+
+        // Retorna a resposta com os imóveis encontrados
+        res.status(200).json(imoveis);
+    } catch (error) {
+        // Caso ocorra algum erro, retorna um erro 500
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 module.exports = {
     createImovel,
@@ -150,5 +173,6 @@ module.exports = {
     getImovelById,
     updateImovel,
     deleteImovel,
-    getFilteredImoveis
+    getFilteredImoveis,
+    getImoveisDestaquesTrue
 };

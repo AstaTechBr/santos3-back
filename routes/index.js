@@ -34,6 +34,7 @@ router.get('/imoveis/:id', ImovelController.getImovelById);
 router.put('/imoveis/atualizar/:id', ImovelController.updateImovel);
 router.delete('/imoveis/deletar/:id', ImovelController.deleteImovel);
 router.get('/imoveisFiltro', ImovelController.getFilteredImoveis);
+router.get('/imoveisDestaque', ImovelController.getImoveisDestaquesTrue);
 
 
 /*---------INQUILINO------------*/
