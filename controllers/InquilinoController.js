@@ -16,7 +16,7 @@ const createInquilino = async (req, res) => {
 const getAllInquilinos = async (req, res) => {
     try {
         const inquilinos = await Inquilino.findAll({
-            include: [{ model: Imovel, attributes: ['codigo_referencia', 'endereco'] }]
+            include: [{ model: Imovel, attributes: ['id', 'endereco'] }]
         });
         res.status(200).json(inquilinos);
     } catch (error) {
@@ -28,7 +28,7 @@ const getAllInquilinos = async (req, res) => {
 const getInquilinoById = async (req, res) => {
     try {
         const inquilino = await Inquilino.findByPk(req.params.id, {
-            include: [{ model: Imovel, attributes: ['codigo_referencia', 'endereco'] }]
+            include: [{ model: Imovel, attributes: ['id', 'endereco'] }]
         });
         if (inquilino) {
             res.status(200).json(inquilino);
