@@ -30,6 +30,7 @@ function createMulter(destination) {
 /*---------IMOVEL---------------*/
 router.post('/imovel', createMulter('./images').array('images', 10) , ImovelController.createImovel);
 router.get('/imoveis', ImovelController.getAllImoveis);
+router.get('/imoveisAdmin', ImovelController.getAllImoveisAdmin);
 router.get('/imoveis/:id', ImovelController.getImovelById);
 router.put('/imoveis/atualizar/:id', ImovelController.updateImovel);
 router.delete('/imoveis/deletar/:id', ImovelController.deleteImovel);

@@ -48,6 +48,20 @@ const getAllImoveis = async (req, res) => {
     }
 };
 
+const getAllImoveisAdmin = async (req, res) => {
+    try {
+        const imoveis = await Imovel.findAll({
+            include: [
+                { model: ImovelImagem, attributes: ['url_imagem'] },
+                { model: Proprietario, attributes: ['nome'] },
+            ]
+        });
+        res.status(200).json(imoveis);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Buscar um imóvel por ID
 const getImovelById = async (req, res) => {
     try {
@@ -137,6 +151,7 @@ const getFilteredImoveis = async (req, res) => {
         if (req.query.destaque) {
             filters.destaque = req.query.destaque === 'true';
         }
+console.log(filters);
 
         // Buscar imóveis com base nos filtros aplicados
         const imoveis = await Imovel.findAll({ where: filters });
@@ -174,5 +189,6 @@ module.exports = {
     updateImovel,
     deleteImovel,
     getFilteredImoveis,
-    getImoveisDestaquesTrue
+    getImoveisDestaquesTrue,
+    getAllImoveisAdmin
 };
