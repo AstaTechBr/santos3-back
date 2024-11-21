@@ -15,6 +15,14 @@ const Imovel = sequelize.define('Imovel', {
             key: 'id'
         }
     },
+    titulo: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    descricao: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     endereco: {
         type: DataTypes.STRING,
         allowNull: false
