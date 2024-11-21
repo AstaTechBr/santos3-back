@@ -4,10 +4,31 @@ const router = express.Router();
 const ImovelController = require('../controllers/ImovelController');
 const InquilinoController = require('../controllers/InquilinoController');
 const ProprietarioController = require('../controllers/ProprietarioController');
+const multer = require('multer');
+const path = require('path');
+const { 
+    createImovelImage, 
+    getAllImovelImages, 
+    getImovelImageById,  
+    deleteImovelImageById
+} = require('../controllers/ImovelImagemController');
 
+function createMulter(destination) {
+    return multer({
+        storage: multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, destination);
+            },
+            filename: function (req, file, cb) {
+                const date = new Date().toISOString().replace(/[^a-zA-Z0-9]/g, '');
+                cb(null, date + path.extname(file.originalname));
+            },
+        }),
+    });
+  }
 
 /*---------IMOVEL---------------*/
-router.post('/imovel', ImovelController.createImovel);
+router.post('/imovel', createMulter('./images').array('images', 10) , ImovelController.createImovel);
 router.get('/imoveis', ImovelController.getAllImoveis);
 router.get('/imoveis/:id', ImovelController.getImovelById);
 router.put('/imoveis/atualizar/:id', ImovelController.updateImovel);
@@ -30,30 +51,6 @@ router.get('/proprietarios/:id', ProprietarioController.getProprietarioById);
 router.put('/proprietarios/atualizar/:id', ProprietarioController.updateProprietario);
 router.delete('/proprietarios/deletar/:id', ProprietarioController.deleteProprietario);
 
-
-// routes/imovelImagemRoutes.js
-const multer = require('multer');
-const path = require('path');
-const { 
-    createImovelImage, 
-    getAllImovelImages, 
-    getImovelImageById,  
-    deleteImovelImageById
-} = require('../controllers/ImovelImagemController');
-
-function createMulter(destination) {
-    return multer({
-        storage: multer.diskStorage({
-            destination: function (req, file, cb) {
-                cb(null, destination);
-            },
-            filename: function (req, file, cb) {
-                const date = new Date().toISOString().replace(/[^a-zA-Z0-9]/g, '');
-                cb(null, date + path.extname(file.originalname));
-            },
-        }),
-    });
-}
 
 // Rota para criar uma nova imagem de imóvel
 router.post('/imovelImagem', createMulter('./images').single('image'), createImovelImage);

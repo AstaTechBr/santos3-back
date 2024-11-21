@@ -2,11 +2,32 @@
 const Imovel = require('../models/Imovel');
 const { Op } = require('sequelize');
 const Proprietario = require('../models/Proprietario');
+const ImovelImagem = require('../models/ImovelImagem')
+const sequelize = require('../config/config')
 
 // Criar um novo imóvel
 const createImovel = async (req, res) => {
+    const transaction = await sequelize.transaction();
     try {
-        const imovel = await Imovel.create(req.body);
+        // 1. Criar o imóvel usando os dados enviados no corpo da requisição
+        const imovel = await Imovel.create(req.body, { transaction });
+
+        // 2. Verificar se há imagens enviadas
+        if (req.files && req.files.length > 0) {
+            // Mapear as imagens para serem inseridas na tabela de imagens
+            const imagens = req.files.map(file => ({
+                url_imagem: file.filename, // Ou ajuste conforme o nome do arquivo/método de upload
+                imovel_id: imovel.id, // Relacionamento com o imóvel
+            }));
+
+            // 3. Inserir as imagens relacionadas ao imóvel
+            await ImovelImagem.bulkCreate(imagens, { transaction });
+        }
+
+        // 4. Confirmar a transação
+        await transaction.commit();
+
+        // 5. Retornar o imóvel com sucesso
         res.status(201).json(imovel);
     } catch (error) {
         res.status(400).json({ error: error.message });
