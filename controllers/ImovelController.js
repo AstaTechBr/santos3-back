@@ -151,6 +151,9 @@ const getFilteredImoveis = async (req, res) => {
         if (req.query.destaque) {
             filters.destaque = req.query.destaque === 'true';
         }
+        if (req.query.endereco) {
+            filters.endereco = { [Op.like]: `%${req.query.endereco}%` };
+        }
 console.log(filters);
 
         // Buscar imóveis com base nos filtros aplicados
