@@ -157,7 +157,14 @@ const getFilteredImoveis = async (req, res) => {
 console.log(filters);
 
         // Buscar imóveis com base nos filtros aplicados
-        const imoveis = await Imovel.findAll({ where: filters });
+        const imoveis = await Imovel.findAll({ where: filters,
+            include: [
+                {
+                    model: ImovelImagem,
+                    attributes: ['url_imagem']
+                }
+            ] 
+        });
         res.status(200).json(imoveis);
     } catch (error) {
         console.error("Erro ao buscar imóveis:", error);
