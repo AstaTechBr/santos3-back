@@ -53,7 +53,7 @@ const getAllImoveisAdmin = async (req, res) => {
         const imoveis = await Imovel.findAll({
             include: [
                 { model: ImovelImagem, attributes: ['url_imagem'] },
-                { model: Proprietario, attributes: ['nome'] },
+                { model: Proprietario },
             ]
         });
         res.status(200).json(imoveis);

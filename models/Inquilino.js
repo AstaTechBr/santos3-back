@@ -42,7 +42,7 @@ const Inquilino = sequelize.define('Inquilino', {
         allowNull: true
     },
     tempo_contrato: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false
     },
     observacoes: {
