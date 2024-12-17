@@ -5,16 +5,18 @@ services:
     buildCommand: npm install
     startCommand: npm start
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: DB_HOST
-        value: mysql-host
+        value: autorack.proxy.rlwy.net
       - key: DB_USER
-        value: seu-usuario
+        value: root
       - key: DB_PASSWORD
-        value: sua-senha
+        value: rXVnuzXHgYQquNGRoiSiKvWKXnfKHARY
       - key: DB_NAME
-        value: nome-do-banco
+        value: railway
+      - key: DB_DIALECT
+        value: mysql
+      - key: DB_PORT
+        value: 57928
     healthCheckPath: /health
     plan: free
     autoDeploy: true

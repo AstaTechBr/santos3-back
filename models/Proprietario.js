@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/config');
 
-const Proprietario = sequelize.define('Proprietario', {
+const Proprietario = sequelize.define('proprietario', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,

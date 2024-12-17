@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/config');
 const Imovel = require('./Imovel');
 
-const Inquilino = sequelize.define('Inquilino', {
+const Inquilino = sequelize.define('inquilino', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,

@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/config');
 const Proprietario = require('./Proprietario');
 
-const Imovel = sequelize.define('Imovel', {
+const Imovel = sequelize.define('imovel', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,

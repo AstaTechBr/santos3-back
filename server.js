@@ -13,8 +13,8 @@ app.use('/images',express.static(path.join(__dirname, 'images')));
 
 app.use('/api', imovelRoutes);
 
-sequelize.sync({ alter: true }).then(() => {
-    console.log('Banco de dados sincronizado');
-}).catch(err => console.log('Erro ao sincronizar banco de dados:', err));
+sequelize.authenticate()
+.then(() => console.log('Conexão com o banco de dados bem-sucedida.'))
+.catch((error) => console.error('Erro ao conectar ao banco de dados:', error));
 
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
