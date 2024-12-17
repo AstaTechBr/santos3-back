@@ -1,4 +1,5 @@
 // server.js
+require('dotenv').config();
 const express = require('express');
 const sequelize = require('./config/config');
 const imovelRoutes = require('./routes/index');
@@ -17,4 +18,4 @@ sequelize.authenticate()
 .then(() => console.log('Conexão com o banco de dados bem-sucedida.'))
 .catch((error) => console.error('Erro ao conectar ao banco de dados:', error));
 
-app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
+app.listen(process.env.PORT, () => console.log('Servidor rodando na porta 3000'));

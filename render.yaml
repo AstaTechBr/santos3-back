@@ -5,6 +5,8 @@ services:
     buildCommand: npm install
     startCommand: npm start
     envVars:
+      - key: PORT
+        value: 3000
       - key: DB_HOST
         value: autorack.proxy.rlwy.net
       - key: DB_USER
